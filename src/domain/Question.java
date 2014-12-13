@@ -4,7 +4,7 @@ public class Question {
 
 	private int id;
 	
-	private String response,extraInfo;
+	private String answer,extraInfo;
 	
 	public int getId() {
 		return id;
@@ -14,12 +14,12 @@ public class Question {
 		this.id = id;
 	}
 
-	public String getResponse() {
-		return response;
+	public String getAnswer() {
+		return answer;
 	}
 
-	public void setResponse(String response) {
-		this.response = response;
+	public void setAnswer(String response) {
+		this.answer = response;
 	}
 
 	public String getExtraInfo() {
