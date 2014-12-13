@@ -8,6 +8,12 @@ public abstract class Question {
 	
 	public abstract boolean solveQuestion(String answer);
 	
+	public Question(int id, String answer, String extraInfo){
+		setId(id);
+		setAnswer(answer);
+		setExtraInfo(extraInfo);
+	}
+	
 	public int getId() {
 		return id;
 	}

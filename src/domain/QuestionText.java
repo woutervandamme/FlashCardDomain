@@ -3,8 +3,15 @@ package domain;
 public class QuestionText extends Question {
 
 	
+	
+
 	public String question;
 
+	public QuestionText(int id, String answer, String extraInfo,String question) {
+		super(id, answer, extraInfo);
+		setQuestion(question);
+	}
+	
 	public String getQuestion() {
 		return question;
 	}
