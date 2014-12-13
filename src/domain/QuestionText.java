@@ -12,6 +12,12 @@ public class QuestionText extends Question {
 	public void setQuestion(String question) {
 		this.question = question;
 	}
+
+	@Override
+	public boolean solveQuestion(String answer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 }

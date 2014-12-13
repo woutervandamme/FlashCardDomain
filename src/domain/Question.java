@@ -1,10 +1,12 @@
 package domain;
 
-public class Question {
+public abstract class Question {
 
 	private int id;
 	
 	private String answer,extraInfo;
+	
+	public abstract boolean solveQuestion(String answer);
 	
 	public int getId() {
 		return id;
