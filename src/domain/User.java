@@ -39,6 +39,27 @@ public class User {
 	public String toString(){
 		return "id: " + email;
 	}
+	/*
+	 * 
+	 * equals als naam en pw zelfde zijn
+	 * 
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object user){
+		
+	   //misschien overkill, ma bon 
+	   if (!(user instanceof User))
+	            return false;
+	   if (user == this)
+	            return true;
+	   User u = (User)user;
+	   if (u.email.equals(email) && u.pw.equals(pw))
+		   		return true;
+	   
+	   return false;
+	}
 	
 	
 }
