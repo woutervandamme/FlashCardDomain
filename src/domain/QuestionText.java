@@ -15,7 +15,15 @@ public class QuestionText extends Question {
 
 	@Override
 	public boolean solveQuestion(String answer) {
-		// TODO Auto-generated method stub
+		/*
+		 * 
+		 * waarschijnlijk een of andere marge van correctheid kunnen inbouwen?
+		 * 
+		 */
+		
+		if(answer.equals(this.getAnswer())){
+			return true;
+		}
 		return false;
 	}
 	
