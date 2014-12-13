@@ -49,7 +49,13 @@ public class Group {
 	public void setAdmin(User admin) {
 		this.admin = admin;
 	}
-
+    /*
+     * 
+     * User Section crud
+     * 
+     * 
+     */
+	
 	public ArrayList<User> getUsers() {
 		return users;
 	}
@@ -57,7 +63,26 @@ public class Group {
 	public void setUsers(ArrayList<User> users) {
 		this.users = users;
 	}
-
+	
+	public void addUser(User user){
+		if(!users.contains(user)){
+			users.add(user);
+		}
+	}
+	
+	public void removeUser(User user){
+		users.remove(user);
+	}
+	
+	
+	/*
+	 * 
+	 * 
+	 * Question section crud
+	 * 
+	 * 
+	 */
+	
 	public ArrayList<Question> getQuestions() {
 		return questions;
 	}
@@ -65,7 +90,20 @@ public class Group {
 	public void setQuestions(ArrayList<Question> questions) {
 		this.questions = questions;
 	}
+	
+	public void addQuestion(Question question){
+		if(!questions.contains(question)){
+			questions.add(question);
+		}
+	}
 
+	public void removeQuestion(Question question){
+		questions.remove(question);
+	}
+	
+	
+	
+	
 	public int getId() {
 		return id;
 	}
