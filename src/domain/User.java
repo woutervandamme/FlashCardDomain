@@ -4,6 +4,12 @@ public class User {
 
 	
 	private String email,name,pw;
+	
+	public User(String email, String name, String pw){
+		setEmail(email);
+		setName(name);
+		setPw(pw);
+	}
 
 	public String getEmail() {
 		return email;

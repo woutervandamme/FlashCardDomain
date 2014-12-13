@@ -8,6 +8,13 @@ public class Message {
 	private MessageType type;
 	private User receiver;
 	
+	public Message(int ID, String title, String body, MessageType type, User receiver){
+		setId(ID);
+		setTitle(title);
+		setBody(body);
+		setType(type);
+		setReceiver(receiver);
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -38,7 +45,4 @@ public class Message {
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
 	}
-	
-	
-	
 }

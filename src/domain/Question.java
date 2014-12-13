@@ -5,7 +5,7 @@ public class Question {
 	private int id;
 	
 	private String response,extraInfo;
-
+	
 	public int getId() {
 		return id;
 	}
