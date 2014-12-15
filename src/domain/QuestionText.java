@@ -7,8 +7,8 @@ public class QuestionText extends Question {
 
 	public String question;
 
-	public QuestionText(int id, String answer, String extraInfo,String question) {
-		super(id, answer, extraInfo);
+	public QuestionText( String answer, String extraInfo,String question) {
+		super(answer, extraInfo);
 		setQuestion(question);
 	}
 	

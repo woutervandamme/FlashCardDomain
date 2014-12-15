@@ -2,8 +2,8 @@ package domain;
 
 public class QuestionImage extends Question {
 
-	public QuestionImage(int id, String answer, String extraInfo) {
-		super(id, answer, extraInfo);
+	public QuestionImage(String answer, String extraInfo) {
+		super( answer, extraInfo);
 		// TODO Auto-generated constructor stub
 	}
 

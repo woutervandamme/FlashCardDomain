@@ -8,8 +8,7 @@ public abstract class Question {
 	
 	public abstract boolean solveQuestion(String answer);
 	
-	public Question(int id, String answer, String extraInfo){
-		setId(id);
+	public Question(String answer, String extraInfo){
 		setAnswer(answer);
 		setExtraInfo(extraInfo);
 	}
@@ -36,6 +35,15 @@ public abstract class Question {
 
 	public void setExtraInfo(String extraInfo) {
 		this.extraInfo = extraInfo;
+	}
+	
+	public boolean answerQuestion(String answer){
+		
+		if(this.getAnswer().equals(answer)){
+			return true;
+		}
+		
+		return false;
 	}
 	
 	

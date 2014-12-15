@@ -8,12 +8,13 @@ public class Message {
 	private MessageType type;
 	private User receiver;
 	
-	public Message(int ID, String title, String body, MessageType type, User receiver){
-		setId(ID);
+	public Message(String title, String body, MessageType type, User receiver){
+		
 		setTitle(title);
 		setBody(body);
 		setType(type);
 		setReceiver(receiver);
+		
 	}
 	
 	public String getTitle() {

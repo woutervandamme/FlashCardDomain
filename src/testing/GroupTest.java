@@ -15,8 +15,6 @@ import domain.User;
 public class GroupTest {
 
 	
-	
-	
 	@Before
 	public void setup(){
 		

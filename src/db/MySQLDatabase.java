@@ -49,15 +49,15 @@ public class MySQLDatabase implements Database {
 
 
 	@Override
-	public Question getRandomQuestion(int id) {
+	public Question getRandomQuestion(int groupId) {
 		Question question = null;
 		try {
 			PreparedStatement getQuestion = dbConnection.prepareStatement("select * from QuestionsInGroup where gropuID = ?");
-			getQuestion.setInt(1, id);
+			getQuestion.setInt(1, groupId);
 			ResultSet result = getQuestion.executeQuery();
 			
 			PreparedStatement sizeStatement = dbConnection.prepareStatement("select Count(*) from QuestionsInGroup where gropuID = ?");
-			sizeStatement.setInt(1, id);
+			sizeStatement.setInt(1, groupId);
 			ResultSet sizeResult = sizeStatement.executeQuery();
 			
 			int size = sizeResult.getInt(1);
@@ -292,7 +292,7 @@ public class MySQLDatabase implements Database {
 		return groups;
 	}
 	
-	private Group getGroup(int groupID){
+	public Group getGroup(int groupID){
 		Group group = null;
 		try {
 			PreparedStatement getGroup = dbConnection.prepareStatement("select * from group where id = ?");

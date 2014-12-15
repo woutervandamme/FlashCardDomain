@@ -12,7 +12,8 @@ public interface Database {
 
 	public User getUser(String email);
 	
-	public Question getRandomQuestion(int id);
+	// returned random question from a group id
+	public Question getRandomQuestion(int groupId);
 	
 	public Message getMessage(int id);
 
@@ -25,6 +26,8 @@ public interface Database {
 	public ArrayList<Group> getGroupsForUser(String email);
 	
 	public User getGroupAdmin(int id);
+	
+	public Group getGroup(int id);
 	
 	public void updateQuestion(Question question);
 	

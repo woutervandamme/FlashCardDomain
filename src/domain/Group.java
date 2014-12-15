@@ -16,6 +16,16 @@ public class Group {
 	
 	private int id;
 
+	public Group(){}
+	
+	public Group(User user /* admin */, String name,boolean canUserInviteFriends, boolean canUserAddQuestions){
+		setAdmin(user);
+		setName(name);
+		setUserAddQuestion(canUserAddQuestions);
+		setUserInviteFriends(canUserInviteFriends);
+	}
+	
+	
 	public String getName() {
 		return name;
 	}
