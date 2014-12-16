@@ -2,6 +2,7 @@ package domain;
 
 public class User {
 
+
 	
 	private String email,name,pw;
 	
