@@ -45,8 +45,7 @@ public class MySQLDatabase implements Database {
 				//no user like this
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("user not found");
 		}
 		return user;
 	}
@@ -68,8 +67,8 @@ public class MySQLDatabase implements Database {
 			int size = sizeResult.getInt(1);
 			question = convertToQuestion(result, size);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("no random question found for this group");
+
 		}
 
 		return question;
@@ -85,7 +84,7 @@ public class MySQLDatabase implements Database {
 			ResultSet result = getMessage.executeQuery();
 			message = convertToMessage(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new dbException("message not found");
 		}
 		return message;
 	}
@@ -100,7 +99,7 @@ public class MySQLDatabase implements Database {
 			ResultSet result = getUsersFromGroup.executeQuery();
 			users = convertToUserList(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new dbException("no users found from this group");
 		}
 		return users;
 	}
@@ -115,7 +114,7 @@ public class MySQLDatabase implements Database {
 			ResultSet result = getMessagesForUser.executeQuery();
 			messages = convertToMessageList(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new dbException("no messages found for this user");
 		}
 		return messages;
 	}
@@ -130,7 +129,7 @@ public class MySQLDatabase implements Database {
 			ResultSet result = getGroupsForUser.executeQuery();
 			groups = convertToGroupList(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new dbException("no groups found for this user");
 		}
 		return groups;
 	}
@@ -145,7 +144,7 @@ public class MySQLDatabase implements Database {
 			ResultSet result = getGroupAdmin.executeQuery();
 			user = getUser(result.getString("admin"));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new dbException("can't find group admin");
 		}
 		return user;
 	}
@@ -192,7 +191,7 @@ public class MySQLDatabase implements Database {
 			
 			//dbConnection.commit();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new dbException("failed to add user");
 		}
 		
 	}
@@ -227,7 +226,7 @@ public class MySQLDatabase implements Database {
 					result.getString("password"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("user convertion went wrong");
 		}
 		return user;
 	}
@@ -248,7 +247,7 @@ public class MySQLDatabase implements Database {
 			message = new Message(ID, title, body, type, receiver);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("message convertion went wrong");
 		}
 		return message;
 	}
@@ -265,7 +264,7 @@ public class MySQLDatabase implements Database {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("question convertion went wrong");
 		}
 		return question;
 	}
@@ -278,7 +277,7 @@ public class MySQLDatabase implements Database {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("user to list convertion went wrong");
 		}
 		return users;
 	}
@@ -295,7 +294,7 @@ public class MySQLDatabase implements Database {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("message to list convertion went wrong");
 		}
 		return messages;
 	}
@@ -308,7 +307,7 @@ public class MySQLDatabase implements Database {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("group to list convertion went wrong");
 		}
 		return groups;
 	}
