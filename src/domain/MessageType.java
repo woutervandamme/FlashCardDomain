@@ -2,6 +2,6 @@ package domain;
 
 public enum MessageType {
 
-	FEEDBACK, EXTRA_INFO;
+	FEEDBACK, EXTRA_INFO, INVITE;
 	
 }

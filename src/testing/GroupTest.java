@@ -7,22 +7,63 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import db.dbException;
 import domain.Group;
 import domain.Question;
 import domain.QuestionText;
 import domain.User;
+import facade.Facade;
 
 public class GroupTest {
 
+	private User user;
+	private Facade facade;
 	
 	@Before
-	public void setup(){
-		
+	public void setUp(){
+		facade = Facade.getInstance();
+	}
+	
+	
+	
+	@Test
+	public void addUser() {
+		try {
+			facade.addUser("blub@bla.blub", "name", "pw");
+			User u = facade.getUser("blub@bla.blub");
+			
+			assertEquals(facade.getUser("blub@bla.blub").getName(), "name");
+		} catch (dbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
+	
+	
+	@Test
+	public void getNonExistingUser(){
+		try {
+			assertNull(facade.getUser("gaga@bla.blub"));
+		} catch (dbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
-	public void adddUser() {
-		
+	public void getExistingUser(){
+		try {
+			assertNotNull(facade.getUser("test@test.lol"));
+		} catch (dbException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test (expected = dbException.class)
+	public void addUserToNonExistingGroup() throws dbException{
+		facade.addUserToGroup(555, "blub@bla.blub");
 	}
 	
 }

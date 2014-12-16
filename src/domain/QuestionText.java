@@ -2,9 +2,6 @@ package domain;
 
 public class QuestionText extends Question {
 
-	
-	
-
 	public String question;
 
 	public QuestionText( String answer, String extraInfo,String question) {
@@ -26,12 +23,8 @@ public class QuestionText extends Question {
 		 * 
 		 * waarschijnlijk een of andere marge van correctheid kunnen inbouwen?
 		 * 
-		 */
-		
-		if(answer.equals(this.getAnswer())){
-			return true;
-		}
-		return false;
+		 */		
+		return answer.equals(this.getAnswer());
 	}
 	
 	
