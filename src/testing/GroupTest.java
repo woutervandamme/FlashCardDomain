@@ -34,7 +34,6 @@ public class GroupTest {
 			
 			assertEquals(facade.getUser("blub@bla.blub").getName(), "name");
 		} catch (dbException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	

@@ -6,11 +6,14 @@ public abstract class Question {
 	
 	private String answer,extraInfo;
 	
+	private QuestionType type;
+
 	public abstract boolean solveQuestion(String answer);
 	
-	public Question(String answer, String extraInfo){
+	public Question(String answer, String extraInfo, QuestionType type){
 		setAnswer(answer);
 		setExtraInfo(extraInfo);
+		setType(type);
 	}
 	
 	public int getId() {
@@ -37,6 +40,14 @@ public abstract class Question {
 		this.extraInfo = extraInfo;
 	}
 	
+	public QuestionType getType() {
+		return type;
+	}
+
+	public void setType(QuestionType type) {
+		this.type = type;
+	}
+	
 	public boolean answerQuestion(String answer){
 		
 		if(this.getAnswer().equals(answer)){
@@ -45,6 +56,10 @@ public abstract class Question {
 		
 		return false;
 	}
+	
+	public abstract String getQuestion();
+	
+	public abstract void setQuestion(String question);
 	
 	
 	

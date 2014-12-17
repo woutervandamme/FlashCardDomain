@@ -9,6 +9,7 @@ import db.dbException;
 import domain.Group;
 import domain.Question;
 import domain.QuestionText;
+import domain.QuestionType;
 import domain.User;
 
 public class Facade {
@@ -112,8 +113,7 @@ public class Facade {
 	}
 	
 	public void addTextQuestion(String answer, String extraInfo, String text) throws dbException{
-		
-		QuestionText question= new QuestionText(answer, extraInfo, text);
+		QuestionText question= new QuestionText(answer, extraInfo, text, QuestionType.TEXT);
 		db.addQuestion(question);
 		
 	}

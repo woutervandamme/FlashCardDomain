@@ -83,8 +83,11 @@ public class MySQLDatabase implements Database {
 			getMessage.setInt(1, id);
 			ResultSet result = getMessage.executeQuery();
 			message = convertToMessage(result);
+			if(message == null){
+				throw new dbException("Message not found, are you sure you have the right ID?");
+			}
 		} catch (SQLException e) {
-			throw new dbException("message not found");
+			throw new dbException("Error while getting messages",e);
 		}
 		return message;
 	}
@@ -98,8 +101,11 @@ public class MySQLDatabase implements Database {
 			getUsersFromGroup.setInt(1, id);
 			ResultSet result = getUsersFromGroup.executeQuery();
 			users = convertToUserList(result);
+			if(users.size() == 0){
+				throw new dbException("No users in this group, are you sure this group exists?");
+			}
 		} catch (SQLException e) {
-			throw new dbException("no users found from this group");
+			throw new dbException("Error while getting users from group",e);
 		}
 		return users;
 	}
@@ -113,8 +119,9 @@ public class MySQLDatabase implements Database {
 			getMessagesForUser.setString(1, email);
 			ResultSet result = getMessagesForUser.executeQuery();
 			messages = convertToMessageList(result);
+			//No check needed for users can have an empty messagebox
 		} catch (SQLException e) {
-			throw new dbException("no messages found for this user");
+			throw new dbException("Error while getting messages for user",e);
 		}
 		return messages;
 	}
@@ -128,8 +135,10 @@ public class MySQLDatabase implements Database {
 			getGroupsForUser.setString(1, email);
 			ResultSet result = getGroupsForUser.executeQuery();
 			groups = convertToGroupList(result);
+			//No check needed for users can have no groups. (Ex. New user)
 		} catch (SQLException e) {
-			throw new dbException("no groups found for this user");
+			throw new dbException("Error while getting groups for user",e);
+			
 		}
 		return groups;
 	}
@@ -142,16 +151,31 @@ public class MySQLDatabase implements Database {
 					.prepareStatement("select admin from Group where ID = ?");
 			getGroupAdmin.setInt(1, id);
 			ResultSet result = getGroupAdmin.executeQuery();
+			if(!result.next()){
+				throw new dbException("Can't find admin for group, does your group exist?");
+			}
 			user = getUser(result.getString("admin"));
 		} catch (SQLException e) {
-			throw new dbException("can't find group admin");
+			throw new dbException("Error while getting group admin",e);
 		}
 		return user;
 	}
 
 	@Override
 	public void updateQuestion(Question question) throws dbException{
-		// TODO Auto-generated method stub
+		try {
+			PreparedStatement addQuestion = dbConnection
+					.prepareStatement("insert into Question(answer,extraInfo,question,type) values(?,?,?)");
+			addQuestion.setString(1, question.getAnswer());
+			addQuestion.setString(2, question.getExtraInfo());
+			addQuestion.setString(3, question.getQuestion());
+			if(addQuestion.executeUpdate() < 1){
+				throw new dbException("failed to add Question");
+			}
+			//dbConnection.commit();
+		} catch (SQLException e) {
+			throw new dbException("Error while adding user",e);
+		}
 
 	}
 
@@ -187,11 +211,12 @@ public class MySQLDatabase implements Database {
 			addUser.setString(1, user.getEmail());
 			addUser.setString(2, user.getName());
 			addUser.setString(3, user.getPw());
-			addUser.executeUpdate();
-			
+			if(addUser.executeUpdate() < 1){
+				throw new dbException("failed to add user");
+			}
 			//dbConnection.commit();
 		} catch (SQLException e) {
-			throw new dbException("failed to add user");
+			throw new dbException("Error while adding user",e);
 		}
 		
 	}
@@ -226,7 +251,7 @@ public class MySQLDatabase implements Database {
 					result.getString("password"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new dbException("user convertion went wrong");
+			throw new dbException("user convertion went wrong",e);
 		}
 		return user;
 	}
@@ -247,7 +272,7 @@ public class MySQLDatabase implements Database {
 			message = new Message(ID, title, body, type, receiver);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new dbException("message convertion went wrong");
+			throw new dbException("message convertion went wrong",e);
 		}
 		return message;
 	}
@@ -264,20 +289,21 @@ public class MySQLDatabase implements Database {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new dbException("question convertion went wrong");
+			throw new dbException("question convertion went wrong",e);
 		}
 		return question;
 	}
 
 	private ArrayList<User> convertToUserList(ResultSet result) throws dbException{
 		ArrayList<User> users = new ArrayList<User>();
+		int i =0;
 		try {
 			while (result.next()) {
 				users.add(getUser(result.getString("UserID")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new dbException("user to list convertion went wrong");
+			throw new dbException("user to list convertion went wrong",e);
 		}
 		return users;
 	}
@@ -294,7 +320,7 @@ public class MySQLDatabase implements Database {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new dbException("message to list convertion went wrong");
+			throw new dbException("message to list convertion went wrong",e);
 		}
 		return messages;
 	}
@@ -307,7 +333,7 @@ public class MySQLDatabase implements Database {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new dbException("group to list convertion went wrong");
+			throw new dbException("group to list convertion went wrong",e);
 		}
 		return groups;
 	}
@@ -328,8 +354,7 @@ public class MySQLDatabase implements Database {
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new dbException("Fetching group went wrong",e);
 		}
 		return group;
 	}
