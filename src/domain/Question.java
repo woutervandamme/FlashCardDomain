@@ -6,14 +6,14 @@ public abstract class Question {
 	
 	private String answer,extraInfo;
 	
-	private QuestionType type;
-
 	public abstract boolean solveQuestion(String answer);
 	
-	public Question(String answer, String extraInfo, QuestionType type){
+	public Question(String answer, String extraInfo){
 		setAnswer(answer);
 		setExtraInfo(extraInfo);
-		setType(type);
+	}
+	public Question(String answer){
+		setAnswer(answer);
 	}
 	
 	public int getId() {
@@ -39,14 +39,7 @@ public abstract class Question {
 	public void setExtraInfo(String extraInfo) {
 		this.extraInfo = extraInfo;
 	}
-	
-	public QuestionType getType() {
-		return type;
-	}
 
-	public void setType(QuestionType type) {
-		this.type = type;
-	}
 	
 	public boolean answerQuestion(String answer){
 		

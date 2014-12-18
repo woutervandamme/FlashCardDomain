@@ -2,11 +2,13 @@ package db;
 
 import java.util.ArrayList;
 import java.util.Random;
+import domain.DomainException;
 //Domain imports
 import domain.Group;
 import domain.Message;
 import domain.MessageType;
 import domain.Question;
+import domain.QuestionFactory;
 import domain.User;
 
 //SQLimports
@@ -32,7 +34,7 @@ public class MySQLDatabase implements Database {
 	}
 
 	@Override
-	public User getUser(String email) throws dbException{
+	public User getUser(String email) throws DBException{
 		User user = null;
 		try {
 			PreparedStatement getUser = dbConnection
@@ -45,13 +47,13 @@ public class MySQLDatabase implements Database {
 				//no user like this
 			}
 		} catch (SQLException e) {
-			throw new dbException("user not found");
+			throw new DBException("user not found");
 		}
 		return user;
 	}
 
 	@Override
-	public Question getRandomQuestion(int groupId) throws dbException{
+	public Question getRandomQuestion(int groupId) throws DBException{
 		Question question = null;
 		try {
 			PreparedStatement getQuestion = dbConnection
@@ -67,7 +69,7 @@ public class MySQLDatabase implements Database {
 			int size = sizeResult.getInt(1);
 			question = convertToQuestion(result, size);
 		} catch (SQLException e) {
-			throw new dbException("no random question found for this group");
+			throw new DBException("no random question found for this group");
 
 		}
 
@@ -75,7 +77,7 @@ public class MySQLDatabase implements Database {
 	}
 
 	@Override
-	public Message getMessage(int id) throws dbException{
+	public Message getMessage(int id) throws DBException{
 		Message message = null;
 		try {
 			PreparedStatement getMessage = dbConnection
@@ -84,16 +86,16 @@ public class MySQLDatabase implements Database {
 			ResultSet result = getMessage.executeQuery();
 			message = convertToMessage(result);
 			if(message == null){
-				throw new dbException("Message not found, are you sure you have the right ID?");
+				throw new DBException("Message not found, are you sure you have the right ID?");
 			}
 		} catch (SQLException e) {
-			throw new dbException("Error while getting messages",e);
+			throw new DBException("Error while getting messages",e);
 		}
 		return message;
 	}
 
 	@Override
-	public ArrayList<User> getUsersFromGroup(int id) throws dbException{
+	public ArrayList<User> getUsersFromGroup(int id) throws DBException{
 		ArrayList<User> users = null;
 		try {
 			PreparedStatement getUsersFromGroup = dbConnection
@@ -102,16 +104,16 @@ public class MySQLDatabase implements Database {
 			ResultSet result = getUsersFromGroup.executeQuery();
 			users = convertToUserList(result);
 			if(users.size() == 0){
-				throw new dbException("No users in this group, are you sure this group exists?");
+				throw new DBException("No users in this group, are you sure this group exists?");
 			}
 		} catch (SQLException e) {
-			throw new dbException("Error while getting users from group",e);
+			throw new DBException("Error while getting users from group",e);
 		}
 		return users;
 	}
 
 	@Override
-	public ArrayList<Message> getMessages(String email) throws dbException{
+	public ArrayList<Message> getMessages(String email) throws DBException{
 		ArrayList<Message> messages = null;
 		try {
 			PreparedStatement getMessagesForUser = dbConnection
@@ -121,13 +123,13 @@ public class MySQLDatabase implements Database {
 			messages = convertToMessageList(result);
 			//No check needed for users can have an empty messagebox
 		} catch (SQLException e) {
-			throw new dbException("Error while getting messages for user",e);
+			throw new DBException("Error while getting messages for user",e);
 		}
 		return messages;
 	}
 
 	@Override
-	public ArrayList<Group> getGroupsForUser(String email) throws dbException{
+	public ArrayList<Group> getGroupsForUser(String email) throws DBException{
 		ArrayList<Group> groups = null;
 		try {
 			PreparedStatement getGroupsForUser = dbConnection
@@ -137,14 +139,14 @@ public class MySQLDatabase implements Database {
 			groups = convertToGroupList(result);
 			//No check needed for users can have no groups. (Ex. New user)
 		} catch (SQLException e) {
-			throw new dbException("Error while getting groups for user",e);
+			throw new DBException("Error while getting groups for user",e);
 			
 		}
 		return groups;
 	}
 
 	@Override
-	public User getGroupAdmin(int id) throws dbException{
+	public User getGroupAdmin(int id) throws DBException{
 		User user = null;
 		try {
 			PreparedStatement getGroupAdmin = dbConnection
@@ -152,59 +154,100 @@ public class MySQLDatabase implements Database {
 			getGroupAdmin.setInt(1, id);
 			ResultSet result = getGroupAdmin.executeQuery();
 			if(!result.next()){
-				throw new dbException("Can't find admin for group, does your group exist?");
+				throw new DBException("Can't find admin for group, does your group exist?");
 			}
 			user = getUser(result.getString("admin"));
 		} catch (SQLException e) {
-			throw new dbException("Error while getting group admin",e);
+			throw new DBException("Error while getting group admin",e);
 		}
 		return user;
 	}
 
 	@Override
-	public void updateQuestion(Question question) throws dbException{
+	public void updateQuestion(Question question) throws DBException{
 		try {
 			PreparedStatement addQuestion = dbConnection
-					.prepareStatement("insert into Question(answer,extraInfo,question,type) values(?,?,?)");
+					.prepareStatement("insert into Question(answer,extraInfo,question,type) values(?,?,?,?)");
 			addQuestion.setString(1, question.getAnswer());
 			addQuestion.setString(2, question.getExtraInfo());
 			addQuestion.setString(3, question.getQuestion());
+			addQuestion.setString(4, QuestionFactory.toDatabaseString(question));
 			if(addQuestion.executeUpdate() < 1){
-				throw new dbException("failed to add Question");
+				throw new DBException("failed to add Question");
 			}
 			//dbConnection.commit();
-		} catch (SQLException e) {
-			throw new dbException("Error while adding user",e);
+		} catch (SQLException | DomainException e) {
+			throw new DBException("Error while adding user",e);
 		}
 
 	}
 
 	@Override
-	public void updateUser(User user) throws dbException{
-		// TODO Auto-generated method stub
+	public void updateUser(User user) throws DBException{
+		try {
+			PreparedStatement updateUser = dbConnection
+					.prepareStatement("update user set e-mail = ?,name = ?,pw = ? WHERE e-mail = ?");
+			updateUser.setString(1, user.getEmail());
+			updateUser.setString(2, user.getName());
+			updateUser.setString(3, user.getPw());
+			updateUser.setString(4, user.getEmail());
+			if(updateUser.executeUpdate() < 1){
+				throw new DBException("failed to update user");
+			}
+			//dbConnection.commit();
+		} catch (SQLException e) {
+			throw new DBException("Error while updating user",e);
+		}
 
 	}
 
 	@Override
-	public void updateGroupName(int id, String name) throws dbException{
-		// TODO Auto-generated method stub
+	public void updateGroupName(int id, String name) throws DBException{
+		try {
+		PreparedStatement updateGroupName = dbConnection
+				.prepareStatement("update group set name = ? WHERE ID = ?");
+		updateGroupName.setString(1, name);
+		updateGroupName.setInt(2, id);
+		if(updateGroupName.executeUpdate() < 1){
+			throw new DBException("failed to update the group name");
+		}
+		} catch (SQLException e) {
+			throw new DBException("Error while changing group",e);
+		}
 
 	}
 
 	@Override
-	public void removeUserFromGroup(int id, String email) throws dbException{
-		// TODO Auto-generated method stub
+	public void removeUserFromGroup(int id, String email) throws DBException{
+		try {
+			PreparedStatement removeUserFromGroup = dbConnection
+					.prepareStatement("DELETE from UsersInGroup where GroupID = ? AND UserID = ?");
+			removeUserFromGroup.setInt(1, id);
+			removeUserFromGroup.setString(2,email);
+			if(removeUserFromGroup.executeUpdate() < 1){
+				throw new DBException("failed to remove the user from the group");
+			}		
+		} catch (SQLException e) {
+			throw new DBException("Error while removing the user from the group",e);
+		}
 
 	}
 
 	@Override
-	public void addUserToGroup(int id, String email) throws dbException{
-		getGroup(id);
+	public void addUserToGroup(int id, String email) throws DBException{
+		try {
+		PreparedStatement addUserToGroup = dbConnection
+				.prepareStatement("insert into usersInGroup(GroupID,UserID) values (?,?)");
+		addUserToGroup.setInt(1, id);
+		addUserToGroup.setString(2, email);
+		} catch (SQLException e) {
+			throw new DBException("Error while adding user to group",e);
+		}
 
 	}
 
 	@Override
-	public void addUser(User user) throws dbException{
+	public void addUser(User user) throws DBException{
 		try {
 			PreparedStatement addUser = dbConnection
 					.prepareStatement("insert into User(email,name,password) values(?,?,?)");
@@ -212,30 +255,62 @@ public class MySQLDatabase implements Database {
 			addUser.setString(2, user.getName());
 			addUser.setString(3, user.getPw());
 			if(addUser.executeUpdate() < 1){
-				throw new dbException("failed to add user");
+				throw new DBException("failed to add user");
 			}
 			//dbConnection.commit();
 		} catch (SQLException e) {
-			throw new dbException("Error while adding user",e);
+			throw new DBException("Error while adding user",e);
 		}
 		
 	}
 
 	@Override
-	public void addQuestion(Question question) throws dbException{
-		// TODO Auto-generated method stub
-
+	public void addQuestion(Question question) throws DBException{
+		try {
+		PreparedStatement addQuestion = dbConnection
+				.prepareStatement("insert into Question(answer,extrainfo,question,type) values(?,?,?,?)");
+		addQuestion.setString(1, question.getAnswer());
+		addQuestion.setString(2, question.getExtraInfo());
+		addQuestion.setString(3, question.getQuestion());
+		addQuestion.setString(4, QuestionFactory.toDatabaseString(question));
+		if(addQuestion.executeUpdate() < 1){
+			throw new DBException("failed to add question");
+		}
+		} catch (SQLException | DomainException e) {
+			throw new DBException("Error while adding question",e);
+		}
 	}
 
 	@Override
-	public void addGroup(Group group) throws dbException{
-		// TODO Auto-generated method stub
-
+	public void addGroup(Group group) throws DBException{
+		try {
+		PreparedStatement addGroup = dbConnection
+				.prepareStatement("insert into Group(name,admin) values(?,?)");
+		addGroup.setString(1, group.getName());
+		addGroup.setString(2, group.getAdmin().getEmail());
+		if(addGroup.executeUpdate() < 1){
+			throw new DBException("failed to add group");
+		}
+		} catch (SQLException e) {
+			throw new DBException("Error while adding group",e);
+		}
 	}
 
 	@Override
-	public void sendMessage(Message message) throws dbException {
-		// TODO Auto-generated method stub
+	public void sendMessage(Message message) throws DBException {
+		try {
+		PreparedStatement addMessage = dbConnection
+				.prepareStatement("insert into Group(title,body,type,UserID) values(?,?,?,?)");
+		addMessage.setString(1, message.getTitle());
+		addMessage.setString(2, message.getBody());
+		addMessage.setString(3, message.getType().toString());
+		addMessage.setString(3, message.getReceiver().getEmail());
+		if(addMessage.executeUpdate() < 1){
+			throw new DBException("failed to add group");
+		}
+		} catch (SQLException e) {
+			throw new DBException("Error while adding group",e);
+		}
 
 	}
 
@@ -244,19 +319,18 @@ public class MySQLDatabase implements Database {
 	 */
 
 	// Could perfectly done in parent method but did split it up for consistency
-	private User convertToUser(ResultSet result) throws dbException{
+	private User convertToUser(ResultSet result) throws DBException{
 		User user = null;
 		try {
 			user = new User(result.getString("email"), result.getString("name"),
 					result.getString("password"));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			throw new dbException("user convertion went wrong",e);
+			throw new DBException("user convertion went wrong",e);
 		}
 		return user;
 	}
 
-	private Message convertToMessage(ResultSet result) throws dbException{
+	private Message convertToMessage(ResultSet result) throws DBException{
 		Message message = null;
 		try {
 			int ID = result.getInt("ID");
@@ -271,61 +345,52 @@ public class MySQLDatabase implements Database {
 			User receiver = getUser(result.getString("UserID"));
 			message = new Message(ID, title, body, type, receiver);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			throw new dbException("message convertion went wrong",e);
+			throw new DBException("message convertion went wrong",e);
 		}
 		return message;
 	}
 
-	private Question convertToQuestion(ResultSet result, int size) throws dbException{
+	private Question convertToQuestion(ResultSet result, int size) throws DBException{
 		Question question = null;
 
 		Random r = new Random();
 		int row = (int) (size * r.nextFloat());
 		try {
-			result.absolute(row); // Move cursor to the random generated row
-
-			// TODO program QuestionFactory to create questions
+			result.absolute(row);
+			
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			throw new dbException("question convertion went wrong",e);
+			throw new DBException("question convertion went wrong",e);
 		}
 		return question;
 	}
 
-	private ArrayList<User> convertToUserList(ResultSet result) throws dbException{
+	private ArrayList<User> convertToUserList(ResultSet result) throws DBException{
 		ArrayList<User> users = new ArrayList<User>();
-		int i =0;
 		try {
 			while (result.next()) {
 				users.add(getUser(result.getString("UserID")));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			throw new dbException("user to list convertion went wrong",e);
+			throw new DBException("user to list convertion went wrong",e);
 		}
 		return users;
 	}
 
-	private ArrayList<Message> convertToMessageList(ResultSet result)throws dbException {
+	private ArrayList<Message> convertToMessageList(ResultSet result)throws DBException {
 		ArrayList<Message> messages = new ArrayList<Message>();
 		try {
 			while (result.next()) {
 				messages.add(convertToMessage(result));
-				// TODO: Check this -> This could generate problems for I'm not
-				// sure if
-				// the cursor position will be reset when passing or not.
-				// Assuming it will not.
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new dbException("message to list convertion went wrong",e);
+			throw new DBException("message to list convertion went wrong",e);
 		}
 		return messages;
 	}
 
-	private ArrayList<Group> convertToGroupList(ResultSet result) throws dbException{
+	private ArrayList<Group> convertToGroupList(ResultSet result) throws DBException{
 		ArrayList<Group> groups = new ArrayList<Group>();
 		try {
 			while (result.next()) {
@@ -333,12 +398,12 @@ public class MySQLDatabase implements Database {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new dbException("group to list convertion went wrong",e);
+			throw new DBException("group to list convertion went wrong",e);
 		}
 		return groups;
 	}
 
-	public Group getGroup(int groupID) throws dbException {
+	public Group getGroup(int groupID) throws DBException {
 		Group group = null;
 		try {
 			PreparedStatement getGroup = dbConnection
@@ -350,17 +415,17 @@ public class MySQLDatabase implements Database {
 				group.setName(result.getString("name"));
 				group.setId(result.getInt("ID"));
 			}else{
-				throw new dbException("Non existing group");
+				throw new DBException("Non existing group");
 			}
 			
 		} catch (SQLException e) {
-			throw new dbException("Fetching group went wrong",e);
+			throw new DBException("Fetching group went wrong",e);
 		}
 		return group;
 	}
 
 	@Override
-	public Question getQuestion(int id) throws dbException{
+	public Question getQuestion(int id) throws DBException{
 		// TODO Auto-generated method stub
 		return null;
 	}

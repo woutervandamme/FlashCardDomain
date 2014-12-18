@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import db.Database;
 import db.DatabaseFactory;
 import db.MySQLDatabase;
-import db.dbException;
+import db.DBException;
 import domain.Group;
 import domain.Question;
 import domain.QuestionText;
-import domain.QuestionType;
 import domain.User;
 
 public class Facade {
@@ -72,12 +71,12 @@ public class Facade {
 	 * get random question from group
 	 * 
 	 */	
-	public Question getRandomQuestion() throws dbException{
+	public Question getRandomQuestion() throws DBException{
 		currentQuestion =  db.getRandomQuestion(currentGroup.getId());
 		return currentQuestion;
 	}
 	
-	public Question getQuestion(int id) throws dbException{
+	public Question getQuestion(int id) throws DBException{
 		return db.getQuestion(id);
 	}
 	
@@ -89,13 +88,13 @@ public class Facade {
 	 * 
 	 */
 	
-	public void addUser(String email, String name, String pw) throws dbException{
+	public void addUser(String email, String name, String pw) throws DBException{
 		User u = new User(email,name,pw);
 		db.addUser(u);
 		
 	}
 	
-	public void addUserToGroup(int groupId, String email)throws dbException{
+	public void addUserToGroup(int groupId, String email)throws DBException{
 		
 		User u = db.getUser(email);
 		Group group = db.getGroup(groupId);
@@ -104,7 +103,7 @@ public class Facade {
 		
 	}
 	
-	public void addGroup(String email, String name, boolean canUserInviteFriends, boolean canUserAddQuestions) throws dbException{
+	public void addGroup(String email, String name, boolean canUserInviteFriends, boolean canUserAddQuestions) throws DBException{
 		
 		User admin = db.getUser(email);
 		Group group = new Group(admin,name,canUserInviteFriends,canUserAddQuestions);
@@ -112,17 +111,17 @@ public class Facade {
 		
 	}
 	
-	public void addTextQuestion(String answer, String extraInfo, String text) throws dbException{
-		QuestionText question= new QuestionText(answer, extraInfo, text, QuestionType.TEXT);
+	public void addTextQuestion(String answer, String extraInfo, String text) throws DBException{
+		QuestionText question= new QuestionText(answer, extraInfo, text);
 		db.addQuestion(question);
 		
 	}
 	
-	public void addImageQuestion(/*Image img,*/ String response)throws dbException{
+	public void addImageQuestion(/*Image img,*/ String response)throws DBException{
 		//TODO fix diis shit
 	}
 	
-	public boolean login(String email, String pw)throws dbException{
+	public boolean login(String email, String pw)throws DBException{
 		boolean loggedIn = false;
 		
 		User u = db.getUser(email);
@@ -159,7 +158,7 @@ public class Facade {
 		//TODO implement messages
 	}
 	
-	public boolean isAdmin(int groupId) throws dbException{
+	public boolean isAdmin(int groupId) throws DBException{
 		
 		User u = db.getGroupAdmin(groupId);
 		
@@ -174,13 +173,13 @@ public class Facade {
 	// get the groups for the currently logged in user
 	// stores the group is the groups variable
 	
-	public ArrayList<Group> getGroups()throws dbException{ 
+	public ArrayList<Group> getGroups()throws DBException{ 
 		groups = db.getGroupsForUser(user.getEmail());
 		return groups;
 	}
 	
 	
-	public User getUser(String email)throws dbException{
+	public User getUser(String email)throws DBException{
 		return db.getUser(email);
 	}
 }

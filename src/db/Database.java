@@ -10,43 +10,43 @@ import domain.User;
 
 public interface Database {
 
-	public User getUser(String email) throws dbException;
+	public User getUser(String email) throws DBException;
 	
 	// returned random question from a group id 
-	public Question getRandomQuestion(int groupId) throws dbException;
+	public Question getRandomQuestion(int groupId) throws DBException;
 	
-	public Message getMessage(int id) throws dbException;
+	public Message getMessage(int id) throws DBException;
 
-	public ArrayList<User> getUsersFromGroup(int id) throws dbException;
+	public ArrayList<User> getUsersFromGroup(int id) throws DBException;
 
-	public ArrayList<Message> getMessages(String email) throws dbException;
+	public ArrayList<Message> getMessages(String email) throws DBException;
 	
 	//Only returns a group object with filled in name and id.
 	//Why: In our application this is only used for listing the groupNames
-	public ArrayList<Group> getGroupsForUser(String email) throws dbException;
+	public ArrayList<Group> getGroupsForUser(String email) throws DBException;
 	
-	public User getGroupAdmin(int id) throws dbException;
+	public User getGroupAdmin(int id) throws DBException;
 	
-	public Group getGroup(int id) throws dbException;
+	public Group getGroup(int id) throws DBException;
 	
-	public Question getQuestion(int id) throws dbException;
+	public Question getQuestion(int id) throws DBException;
 	
-	public void updateQuestion(Question question) throws dbException;
+	public void updateQuestion(Question question) throws DBException;
 	
-	public void updateUser(User user) throws dbException;
+	public void updateUser(User user) throws DBException;
 	
-	public void updateGroupName(int id, String name) throws dbException;
+	public void updateGroupName(int id, String name) throws DBException;
 	
-	public void removeUserFromGroup(int id, String email) throws dbException;
+	public void removeUserFromGroup(int id, String email) throws DBException;
 	
-	public void addUserToGroup(int id, String email) throws dbException;
+	public void addUserToGroup(int id, String email) throws DBException;
 	
-	public void addUser(User user) throws dbException;
+	public void addUser(User user) throws DBException;
 	
-	public void addQuestion(Question question) throws dbException;
+	public void addQuestion(Question question) throws DBException;
 	
-	public void addGroup(Group group) throws dbException;
+	public void addGroup(Group group) throws DBException;
 	
-	public void sendMessage(Message message) throws dbException;
+	public void sendMessage(Message message) throws DBException;
 
 }
