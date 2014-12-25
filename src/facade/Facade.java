@@ -7,6 +7,7 @@ import db.DatabaseFactory;
 import db.MySQLDatabase;
 import db.DBException;
 import domain.Group;
+import domain.Message;
 import domain.Question;
 import domain.QuestionText;
 import domain.User;
@@ -168,6 +169,10 @@ public class Facade {
 	
 	public void sendMessage(String title, String body, String type, String recipient){
 		//TODO implement messages
+	}
+	
+	public ArrayList<Message> getMessagesForUser(String email) throws DBException{
+		return db.getMessages(email);
 	}
 	
 	public boolean isAdmin(int groupId) throws DBException{
