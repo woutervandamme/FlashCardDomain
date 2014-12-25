@@ -24,8 +24,6 @@ public class GroupTest {
 		facade = Facade.getInstance();
 	}
 	
-	
-	
 	@Test
 	public void addUser() {
 		try {
@@ -40,14 +38,9 @@ public class GroupTest {
 	}
 	
 	
-	@Test
-	public void getNonExistingUser(){
-		try {
-			assertNull(facade.getUser("gaga@bla.blub"));
-		} catch (DBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	@Test (expected = DBException.class)
+	public void getNonExistingUser() throws DBException{
+		facade.getUser("gaga@bla.blub");
 	}
 	
 	@Test
@@ -63,6 +56,36 @@ public class GroupTest {
 	@Test (expected = DBException.class)
 	public void addUserToNonExistingGroup() throws DBException{
 		facade.addUserToGroup(555, "blub@bla.blub");
+	}
+	
+	@Test  (expected = DBException.class)
+	public void getNonExistingQuestion() throws DBException{
+		facade.getQuestion(99999);
+	}
+	
+	@Test (expected = DBException.class)
+	public void getNonExistingGroup() throws DBException{
+		facade.getGroup(9999999);
+	}
+	
+	@Test (expected = DBException.class)
+	public void getNonExistingGroupAdmin() throws DBException {
+		facade.getGroupAdmin(99999);
+	}
+	
+	@Test (expected = DBException.class)
+	public void getGroupsForNonExistingUser() throws DBException{
+		facade.getGroupsForUser("fefewfwef@frefre.be");
+	}
+	
+	@Test (expected = DBException.class)
+	public void getMessagesForNonExistingUser() throws DBException {
+		facade.getMessagesForUser("fefewfwef@frefre.be");
+	}
+	
+	@Test
+	public void isAdminForNonExistingGroup() throws DBException{
+		facade.isAdmin(999999);
 	}
 	
 }
