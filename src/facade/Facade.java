@@ -88,6 +88,11 @@ public class Facade {
 		return db.getGroupAdmin(groupId);
 	}
 
+	
+	public ArrayList<Group> getGroupsForUser(String email) throws DBException{
+		return db.getGroupsForUser(email);
+	}
+
 	/*
 	 * 
 	 * registreer
