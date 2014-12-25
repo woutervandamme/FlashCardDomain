@@ -84,6 +84,9 @@ public class Facade {
 		return db.getGroup(id);
 	}
 	
+	public User getGroupAdmin(int groupId) throws DBException{
+		return db.getGroupAdmin(groupId);
+	}
 
 	/*
 	 * 
