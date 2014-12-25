@@ -80,6 +80,10 @@ public class Facade {
 		return db.getQuestion(id);
 	}
 	
+	public Group getGroup(int id) throws DBException{
+		return db.getGroup(id);
+	}
+	
 
 	/*
 	 * 
