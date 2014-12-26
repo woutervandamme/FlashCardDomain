@@ -25,32 +25,20 @@ public class GroupTest {
 	}
 	
 	@Test
-	public void addUser() {
-		try {
-			facade.addUser("blub@bla.blub", "name", "pw");
-			User u = facade.getUser("blub@bla.blub");
-			
-			assertEquals(facade.getUser("blub@bla.blub").getName(), "name");
-		} catch (DBException e) {
-			e.printStackTrace();
-		}
-	
+	public void addUser() throws DBException {
+		facade.addUser("blub@bla.blub", "name", "pw");
+		User u = facade.getUser("blub@bla.blub");
+		assertEquals(facade.getUser("blub@bla.blub").getName(), "name");
 	}
-	
 	
 	@Test (expected = DBException.class)
 	public void getNonExistingUser() throws DBException{
-		facade.getUser("gaga@bla.blub");
+		facade.getUser("gaferrfga@bla.blub");
 	}
 	
 	@Test
-	public void getExistingUser(){
-		try {
-			assertNotNull(facade.getUser("test@test.lol"));
-		} catch (DBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void getExistingUser() throws DBException{
+		assertNotNull(facade.getUser("test@test.lol"));
 	}
 	
 	@Test (expected = DBException.class)
@@ -60,7 +48,7 @@ public class GroupTest {
 	
 	@Test  (expected = DBException.class)
 	public void getNonExistingQuestion() throws DBException{
-		facade.getQuestion(99999);
+		facade.getQuestion(999999999);
 	}
 	
 	@Test (expected = DBException.class)
@@ -83,7 +71,7 @@ public class GroupTest {
 		facade.getMessagesForUser("fefewfwef@frefre.be");
 	}
 	
-	@Test
+	@Test (expected = DBException.class)
 	public void isAdminForNonExistingGroup() throws DBException{
 		facade.isAdmin(999999);
 	}
