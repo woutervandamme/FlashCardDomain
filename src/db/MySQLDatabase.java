@@ -37,8 +37,7 @@ public class MySQLDatabase implements Database {
 	public User getUser(String email) throws DBException{
 		User user = null;
 		try {
-			PreparedStatement getUser = dbConnection
-					.prepareStatement("select * from User where email = ?");
+			PreparedStatement getUser = dbConnection.prepareStatement("select * from User where email = ?");
 			getUser.setString(1, email);
 			ResultSet result = getUser.executeQuery();
 			if(result.next()){

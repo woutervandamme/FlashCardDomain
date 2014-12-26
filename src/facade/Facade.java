@@ -3,7 +3,6 @@ package facade;
 import java.util.ArrayList;
 
 import db.Database;
-import db.DatabaseFactory;
 import db.MySQLDatabase;
 import db.DBException;
 import domain.Group;
@@ -20,7 +19,6 @@ public class Facade {
 	private User user;
 	
 	private Database db;
-	private DatabaseFactory dbFac;
 	
 	private ArrayList<Group> groups;
 	private Group currentGroup;
@@ -50,8 +48,7 @@ public class Facade {
 	
 	
 	private Facade(){
-		dbFac = new DatabaseFactory();
-		db = new MySQLDatabase();
+		db = null;
 	}
 	
 	public void setDatabase(Database db){
@@ -136,13 +133,18 @@ public class Facade {
 	
 	public boolean login(String email, String pw)throws DBException{
 		boolean loggedIn = false;
+		User u =null;
 		
-		User u = db.getUser(email);
+		if(db != null){
+			u = db.getUser(email);
+		}else{
+			throw new DBException("No database available");
+		}
 		
 		//als user bestaat
 		if(u != null){
 			//check voor pw (vrij basic) TODO add encryption algorithm
-			if(user.getPw().equals(pw)){
+			if(u.getPw().equals(pw)){
 				user = u;
 				loggedIn = true;
 			}
