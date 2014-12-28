@@ -64,13 +64,9 @@ public class Facade {
 		return instance;
 	}
 	
-	/*
-	 * currentGroup is active group
-	 * get random question from group
-	 * 
-	 */	
-	public Question getRandomQuestion() throws DBException{
-		currentQuestion =  db.getRandomQuestion(currentGroup.getId());
+
+	public Question getRandomQuestion(int id) throws DBException{
+		currentQuestion =  db.getRandomQuestion(id);
 		return currentQuestion;
 	}
 	
@@ -115,8 +111,7 @@ public class Facade {
 	
 	public void addGroup(String email, String name, boolean canUserInviteFriends, boolean canUserAddQuestions) throws DBException{
 		
-		User admin = db.getUser(email);
-		Group group = new Group(admin,name,canUserInviteFriends,canUserAddQuestions);
+		Group group = new Group(user,name,canUserInviteFriends,canUserAddQuestions);
 		db.addGroup(group);
 		
 	}
