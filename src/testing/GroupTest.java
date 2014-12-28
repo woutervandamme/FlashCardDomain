@@ -1,22 +1,15 @@
 package testing;
 
 import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import db.DBException;
-import domain.Group;
-import domain.Question;
-import domain.QuestionText;
 import domain.User;
 import facade.Facade;
 
 public class GroupTest {
 
-	private User user;
 	private Facade facade;
 	
 	@Before
@@ -34,11 +27,6 @@ public class GroupTest {
 	@Test (expected = DBException.class)
 	public void getNonExistingUser() throws DBException{
 		facade.getUser("gaferrfga@bla.blub");
-	}
-	
-	@Test
-	public void getExistingUser() throws DBException{
-		assertNotNull(facade.getUser("test@test.lol"));
 	}
 	
 	@Test (expected = DBException.class)

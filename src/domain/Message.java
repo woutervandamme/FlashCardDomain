@@ -57,4 +57,8 @@ public class Message {
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
 	}
+	
+	public String toString(){
+		return this.title;
+	}
 }

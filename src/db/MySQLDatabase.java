@@ -37,7 +37,8 @@ public class MySQLDatabase implements Database {
 	public User getUser(String email) throws DBException{
 		User user = null;
 		try {
-			PreparedStatement getUser = dbConnection.prepareStatement("select * from User where email = ?");
+			PreparedStatement getUser = dbConnection
+					.prepareStatement("select * from User where email = ?");
 			getUser.setString(1, email);
 			ResultSet result = getUser.executeQuery();
 			if(result.next()){
@@ -166,11 +167,12 @@ public class MySQLDatabase implements Database {
 	public void updateQuestion(Question question) throws DBException{
 		try {
 			PreparedStatement addQuestion = dbConnection
-					.prepareStatement("insert into Question(answer,extraInfo,question,type) values(?,?,?,?)");
+					.prepareStatement("update Question set answer = ?, extraInfo = ?, question = ?, type = ? WHERE id = ?");
 			addQuestion.setString(1, question.getAnswer());
 			addQuestion.setString(2, question.getExtraInfo());
 			addQuestion.setString(3, question.getQuestion());
 			addQuestion.setString(4, QuestionFactory.toDatabaseString(question));
+			addQuestion.setInt(5, question.getId());
 			if(addQuestion.executeUpdate() < 1){
 				throw new DBException("failed to add Question");
 			}
@@ -299,7 +301,7 @@ public class MySQLDatabase implements Database {
 	public void sendMessage(Message message) throws DBException {
 		try {
 		PreparedStatement addMessage = dbConnection
-				.prepareStatement("insert into Group(title,body,type,UserID) values(?,?,?,?)");
+				.prepareStatement("insert into Message(title,body,type,UserID) values(?,?,?,?)");
 		addMessage.setString(1, message.getTitle());
 		addMessage.setString(2, message.getBody());
 		addMessage.setString(3, message.getType().toString());

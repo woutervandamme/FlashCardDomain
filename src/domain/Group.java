@@ -122,5 +122,9 @@ public class Group {
 		this.id = id;
 	}
 	
+	public String toString(){
+		return this.name;
+	}
+	
 	
 }

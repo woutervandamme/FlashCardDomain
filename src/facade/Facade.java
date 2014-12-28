@@ -189,6 +189,10 @@ public class Facade {
 		
 	}
 	
+	public User getCurrentUser(){
+		return user;
+	}
+	
 	// get the groups for the currently logged in user
 	// stores the group is the groups variable
 	
