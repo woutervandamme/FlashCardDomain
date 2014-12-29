@@ -203,7 +203,7 @@ public class MySQLDatabase implements Database {
 	}
 
 	@Override
-	public void updateGroupName(int id, String name) throws DBException{
+	public void updateGroup(int id, String name, boolean canInvite, boolean canAdd) throws DBException{
 		try {
 		PreparedStatement updateGroupName = dbConnection
 				.prepareStatement("update group set name = ? WHERE ID = ?");

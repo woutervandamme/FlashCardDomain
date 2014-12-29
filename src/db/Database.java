@@ -35,7 +35,7 @@ public interface Database {
 	
 	public void updateUser(User user) throws DBException;
 	
-	public void updateGroupName(int id, String name) throws DBException;
+	public void updateGroup(int id, String name, boolean canInvite, boolean canAdd) throws DBException;
 	
 	public void removeUserFromGroup(int id, String email) throws DBException;
 	

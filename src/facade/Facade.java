@@ -200,4 +200,20 @@ public class Facade {
 	public User getUser(String email)throws DBException{
 		return db.getUser(email);
 	}
+	
+	public void updateQuestion(Question question) throws DBException {
+		db.updateQuestion(question);
+	}
+	
+	public void updateGroup(int id, String name,boolean canInvite, boolean canAdd) throws DBException {
+		db.updateGroup(id, name,canInvite,canAdd);
+	}
+	
+	public void updateQuestion(String screenName, String password) throws DBException {
+		user.setName(screenName);
+		user.setPw(password);
+		db.updateUser(user);
+	}
+	
+	
 }
