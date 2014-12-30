@@ -266,7 +266,7 @@ public class MySQLDatabase implements Database {
 	}
 
 	@Override
-	public void addQuestion(Question question) throws DBException{
+	public void addQuestion(Question question, int groupID) throws DBException{
 		try {
 		PreparedStatement addQuestion = dbConnection
 				.prepareStatement("insert into Question(answer,extrainfo,question,type) values(?,?,?,?)");
@@ -427,8 +427,15 @@ public class MySQLDatabase implements Database {
 
 	@Override
 	public Question getQuestion(int id) throws DBException{
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public void addQuestionToGroup(int QuestionID, int GroupID)
+			throws DBException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

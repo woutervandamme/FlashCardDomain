@@ -118,7 +118,7 @@ public class Facade {
 		
 	}
 	
-	public void addQuestion(String answer, String extraInfo, String question,String type) throws DBException{
+	public void addQuestion(String answer, String extraInfo, String question,String type,int groupID) throws DBException{
 			Question q = null;
 			try {
 				q = QuestionFactory.getQuestion(answer, question, type);
@@ -126,7 +126,7 @@ public class Facade {
 				throw new DBException("Something went wrong adding your question",e);
 			}
 			q.setExtraInfo(extraInfo);
-		db.addQuestion(q);
+		db.addQuestion(q,groupID);
 		
 	}
 	

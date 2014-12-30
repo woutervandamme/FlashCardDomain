@@ -43,10 +43,12 @@ public interface Database {
 	
 	public void addUser(User user) throws DBException;
 	
-	public void addQuestion(Question question) throws DBException;
+	public void addQuestion(Question question,int GroupID) throws DBException;
 	
 	public void addGroup(Group group) throws DBException;
 	
 	public void sendMessage(Message message) throws DBException;
+	
+	public void addQuestionToGroup(int QuestionID, int GroupID) throws DBException;
 
 }
