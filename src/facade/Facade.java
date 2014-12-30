@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import db.Database;
 import db.MySQLDatabase;
 import db.DBException;
+import domain.DomainException;
 import domain.Group;
 import domain.Message;
 import domain.Question;
+import domain.QuestionFactory;
 import domain.QuestionText;
 import domain.User;
 
@@ -116,15 +118,18 @@ public class Facade {
 		
 	}
 	
-	public void addTextQuestion(String answer, String extraInfo, String text) throws DBException{
-		QuestionText question= new QuestionText(answer, extraInfo, text);
-		db.addQuestion(question);
+	public void addQuestion(String answer, String extraInfo, String question,String type) throws DBException{
+			Question q = null;
+			try {
+				q = QuestionFactory.getQuestion(answer, question, type);
+			} catch (DomainException e) {
+				throw new DBException("Something went wrong adding your question",e);
+			}
+			q.setExtraInfo(extraInfo);
+		db.addQuestion(q);
 		
 	}
 	
-	public void addImageQuestion(/*Image img,*/ String response)throws DBException{
-		//TODO fix diis shit
-	}
 	
 	public boolean login(String email, String pw)throws DBException{
 		boolean loggedIn = false;
