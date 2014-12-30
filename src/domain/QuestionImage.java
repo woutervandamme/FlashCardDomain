@@ -4,12 +4,13 @@ public class QuestionImage extends Question {
 	public String questionPath;
 
 	public QuestionImage(String answer, String question, String extraInfo) {
-		super(answer, question);
-		setExtraInfo(extraInfo);
+		super(answer, extraInfo);
+		setQuestion(question);
 	}
 	
 	public QuestionImage(String answer, String question) {
-		super(answer, question);
+		super(answer);
+		setQuestion(question);
 	}
 	
 	
