@@ -111,6 +111,7 @@ public class Facade {
 		
 	}
 	
+	
 	public void addGroup(String email, String name, boolean canUserInviteFriends, boolean canUserAddQuestions) throws DBException{
 		
 		Group group = new Group(user,name,canUserInviteFriends,canUserAddQuestions);
@@ -214,7 +215,7 @@ public class Facade {
 		db.updateGroup(id, name,canInvite,canAdd);
 	}
 	
-	public void updateQuestion(String screenName, String password) throws DBException {
+	public void updateUser(String screenName, String password) throws DBException {
 		user.setName(screenName);
 		user.setPw(password);
 		db.updateUser(user);
