@@ -103,12 +103,7 @@ public class Facade {
 	}
 	
 	public void addUserToGroup(int groupId, String email)throws DBException{
-		
-		User u = db.getUser(email);
-		Group group = db.getGroup(groupId);
-		
-		group.addUser(u);
-		
+		db.addUserToGroup(groupId, email);
 	}
 	
 	
